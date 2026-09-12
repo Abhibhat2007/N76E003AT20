@@ -3,10 +3,10 @@
     {
       "name": "Nuvoton",
       "maintainer": "Community",
-      "websiteURL": "https://github.com/USERNAME/arduino-n76e003",
-      "email": "support@example.com",
+      "websiteURL": "https://github.com/Abhibhat2007/arduino-n76e003",
+      "email": "abhishekbhat882@gmail.com",
       "help": {
-        "online": "https://github.com/USERNAME/arduino-n76e003/issues"
+        "online": "https://github.com/Abhibhat2007/arduino-n76e003/issues"
       },
       "platforms": [
         {
@@ -15,9 +15,9 @@
           "version": "1.0.0",
           "category": "Contributed",
           "help": {
-            "online": "https://github.com/USERNAME/arduino-n76e003"
+            "online": "https://github.com/Abhibhat2007/arduino-n76e003"
           },
-          "url": "https://github.com/USERNAME/arduino-n76e003/releases/download/v1.0.0/n76e003-arduino-1.0.0.zip",
+          "url": "https://github.com/Abhibhat2007/arduino-n76e003/releases/download/v1.0.0/n76e003-arduino-1.0.0.zip",
           "archiveFileName": "n76e003-arduino-1.0.0.zip",
           "checksum": "SHA-256:c4118f1585108c3d7275ea379272e90d47ce247c4e0278931d3b56ae6d4ca43a",
           "size": "17890",
