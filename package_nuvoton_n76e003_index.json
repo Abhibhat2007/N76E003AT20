@@ -19,8 +19,8 @@
           },
           "url": "https://github.com/Abhibhat2007/N76E003AT20/releases/download/v1.0.0/n76e003-arduino-1.0.0.zip",
           "archiveFileName": "n76e003-arduino-1.0.0.zip",
-          "checksum": "SHA-256:c4118f1585108c3d7275ea379272e90d47ce247c4e0278931d3b56ae6d4ca43a",
-          "size": "17890",
+          "checksum": "SHA-256:60b1183bbe575f7ef3b589e59dc61da607a60bc8addd29d8d29809966f33a9c8",
+          "size": "17903",
           "boards": [
             {
               "name": "Nuvoton N76E003 (TSSOP20/QFN20)"
