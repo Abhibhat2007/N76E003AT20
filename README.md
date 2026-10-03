@@ -105,30 +105,118 @@ void loop() {
 
 ---
 
-## 4. Board Pinout & Sensor Cheat Sheet
+## 4. PARAS Board Pinout & Hardware Reference
 
-Pin mapping for the **PARAS N76E003** breakout board:
+The **PARAS N76E003** breakout board features two 12-pin side headers and one 5-pin bottom expansion header.
 
-| Board Silkscreen | Arduino Pin Name | Hardware Function | Notes |
-|---|---|---|---|
-| **`LED(P1.2)`** | `LED_BUILTIN` or `8` or `P1_2` | User LED / GPIO | Built-in LED on board |
-| **`P0.5`** | `A0` or `14` | 12-bit ADC Input (AIN1) | 0 to 4095 reading |
-| **`P0.4`** | `A1` or `15` | 12-bit ADC Input (AIN2) | 0 to 4095 reading |
-| **`PWM5P0.3`** | `A2` or `13` or `PIN_D13` | ADC Input (AIN3) / PWM / GPIO | Digital 13 |
-| **`PWM4P0.1`** | `A3` or `12` or `PIN_D12` | ADC Input (AIN4) / PWM / GPIO | Digital 12 |
-| **`PWM3P0.0`** | `A4` or `11` or `PIN_D11` | ADC Input (AIN5) / PWM / GPIO | Digital 11 |
-| **`PWM2P1.0`** | `A5` or `10` or `PIN_D10` | ADC Input (AIN6) / PWM / GPIO | Digital 10 |
-| **`PWM1P1.1`** | `A6` or `9` or `PIN_D9` | ADC Input (AIN7) / PWM / GPIO | Digital 9 |
-| **`P0.6TX`** | `1` or `PIN_D1` (or `A7`) | Serial TX (UART0) | To CH340 RX |
-| **`P0.7RX`** | `0` or `PIN_D0` | Serial RX (UART0) | To CH340 TX |
-| **`SCLP1.3`** | `7` or `PIN_D7` | GPIO / Hardware I2C SCL | Wire bus |
-| **`SDAP1.2`** | `8` or `PIN_D8` | GPIO / Hardware I2C SDA | Wire bus |
-| **`P1.4`** | `6` or `PIN_D6` | GPIO / SPI CLK | SPI bus |
-| **`P1.5PWM5`**| `5` or `PIN_D5` | GPIO / PWM | |
-| **`P1.6`** | `4` or `PIN_D4` | GPIO | |
-| **`P1.7`** | `3` or `PIN_D3` | GPIO / External INT1 | Interrupts |
-| **`P3.0`** | `2` or `PIN_D2` | GPIO / External INT0 | Interrupts |
-| **`+5V` / `+3V` / `GND`** | Power Rails | Power supplies for sensors | Up to 500mA USB |
+### 4.1 Physical Board Diagram (Top View)
+
+```text
+                     +---------------------------------------+
+                     | [ USB ]               [ RESET BUTTON ]|
+                     |                                       |
+                     |  (POWER LED)            (LED P1.2)    |
+                     |                     [ PARAS ]         |
+                     |                                       |
+         (Top)   GND | [1]                               [1] | GND
+                 GND | [2]                               [2] | +3V
+                +5V  | [3]                               [3] | P1.4       (D6 / SPI_CLK / PWM4)
+                +5V  | [4]                               [4] | SCLP1.3    (D7 / SPI_MOSI / PWM3)
+(D5 / PWM5) P1.5PWM5 | [5]                               [5] | SDAP1.2    (D8 / LED_BUILTIN / PWM0)
+(D4)            P1.6 | [6]                               [6] | PWM1P1.1   (D9 / A3 / PWM1)
+(D3 / A4)       P1.7 | [7]                               [7] | PWM2P1.0   (D10 / PWM2)
+(D2 / A5)       P3.0 | [8]                               [8] | PWM3P0.0   (D11 / SPI_MISO / PWM3)
+(D17 / RST)  P2.0RST | [9]                               [9] | PWM4P0.1   (D12 / SPI_SS / PWM4)
+(D0 / A6)     P0.7RX | [10]                             [10] | P0.2       (D16 / ICE_CLK)
+(D1 / A7)     P0.6TX | [11]                             [11] | PWM5P0.3   (D13 / A2 / PWM5)
+(D14 / A0)      P0.5 | [12]     [ N76E003 CHIP ]        [12] | P0.4       (D15 / A1 / PWM3)
+                     +---------------------------------------+
+                                  |   |   |   |   |
+                                 GND RST SCL SDA +5V
+                                [ 5-Pin Bottom Header ]
+```
+
+---
+
+### 4.2 Left Side Header (12 Pins, Top to Bottom)
+
+| Pin # | Board Silkscreen | Port Pin | Arduino Digital | Arduino Analog | Alternate Hardware Functions | Notes / Best Use |
+|:---:|:---|:---:|:---:|:---:|:---|:---|
+| **1**  | **`GND`** | — | Power | Power | Ground supply rail (0V) | Common Ground |
+| **2**  | **`GND`** | — | Power | Power | Ground supply rail (0V) | Common Ground |
+| **3**  | **`+5V`** | — | Power | Power | +5V power rail from USB | Sensor power supply |
+| **4**  | **`+5V`** | — | Power | Power | +5V power rail from USB | Sensor power supply |
+| **5**  | **`P1.5PWM5`** | `P1.5` | `D5` (or `5`) | — | `PWM5`, `I2C_SDA`, `SS` | Hardware I2C SDA / PWM5 |
+| **6**  | **`P1.6`** | `P1.6` | `D4` (or `4`) | — | `I2C_SCL`, `TXD_1` | Hardware I2C SCL |
+| **7**  | **`P1.7`** | `P1.7` | `D3` (or `3`) | **`A4`** | `AIN0`, `INT1` | 12-bit ADC Ch 0 / Ext Interrupt 1 (DHT11 Data) |
+| **8**  | **`P3.0`** | `P3.0` | `D2` (or `2`) | **`A5`** | `AIN1`, `INT0`, `ICE_DAT` | 12-bit ADC Ch 1 / Ext Interrupt 0 |
+| **9**  | **`P2.0RST`** | `P2.0` | `D17` (or `17`) | — | `RST` | Reset Pin (connected to red button) |
+| **10** | **`P0.7RX`** | `P0.7` | `D0` (or `0`) | `A6` | `RXD0`, `AIN2`, `PWM0` | Hardware Serial RX (Connected to CH340 TX) |
+| **11** | **`P0.6TX`** | `P0.6` | `D1` (or `1`) | `A7` | `TXD0`, `AIN3`, `PWM1` | Hardware Serial TX (Connected to CH340 RX) |
+| **12** | **`P0.5`** | `P0.5` | `D14` (or `14`) | **`A0`** | `AIN4`, `PWM2` | **Primary 12-bit ADC Input** (Potentiometer / Sensors) |
+
+---
+
+### 4.3 Right Side Header (12 Pins, Top to Bottom)
+
+| Pin # | Board Silkscreen | Port Pin | Arduino Digital | Arduino Analog | Alternate Hardware Functions | Notes / Best Use |
+|:---:|:---|:---:|:---:|:---:|:---|:---|
+| **1**  | **`GND`** | — | Power | Power | Ground supply rail (0V) | Common Ground |
+| **2**  | **`+3V`** | — | Power | Power | +3.3V regulated power rail | 3.3V sensor supply |
+| **3**  | **`P1.4`** | `P1.4` | `D6` (or `6`) | — | `SPI_CLK`, `PWM4`, `SDA_1` | Hardware SPI Clock (SCK) |
+| **4**  | **`SCLP1.3`** | `P1.3` | `D7` (or `7`) | — | `SPI_MOSI`, `PWM3`, `SCL_1` | Hardware SPI MOSI |
+| **5**  | **`SDAP1.2`** | `P1.2` | `D8` (or `8`) | — | `PWM0`, `STADC` | **Onboard User LED** (`LED_BUILTIN`) |
+| **6**  | **`PWM1P1.1`** | `P1.1` | `D9` (or `9`) | **`A3`** | `AIN7`, `PWM1`, `CLO` | 12-bit ADC Ch 7 / PWM1 |
+| **7**  | **`PWM2P1.0`** | `P1.0` | `D10` (or `10`) | — | `PWM2`, `SPCLK` | PWM2 / General GPIO |
+| **8**  | **`PWM3P0.0`** | `P0.0` | `D11` (or `11`) | — | `SPI_MISO`, `PWM3` | Hardware SPI MISO / PWM3 |
+| **9**  | **`PWM4P0.1`** | `P0.1` | `D12` (or `12`) | — | `SPI_SS`, `PWM4` | Hardware SPI Slave Select (SS) / PWM4 |
+| **10** | **`P0.2`** | `P0.2` | `D16` (or `16`) | — | `ICE_CLK`, `RXD_1` | Nu-Link ICE Clock / General GPIO |
+| **11** | **`PWM5P0.3`** | `P0.3` | `D13` (or `13`) | **`A2`** | `AIN6`, `PWM5` | 12-bit ADC Ch 6 / PWM5 |
+| **12** | **`P0.4`** | `P0.4` | `D15` (or `15`) | **`A1`** | `AIN5`, `PWM3`, `STADC` | **Secondary 12-bit ADC Input** (1k Preset) |
+
+---
+
+### 4.4 Bottom Expansion Header (5 Pins, Left to Right)
+
+| Pin # | Board Silkscreen | Connected To | Description |
+|:---:|:---|:---|:---|
+| **1** | **`GND`** | Ground rail | 0V Common Ground |
+| **2** | **`RST`** | `P2.0` / Reset | External Reset line |
+| **3** | **`SCL`** | `P1.6` (`D4`) | Hardware I2C Clock (for OLED / I2C displays) |
+| **4** | **`SDA`** | `P1.5` (`D5`) | Hardware I2C Data (for OLED / I2C sensors) |
+| **5** | **`+5V`** | +5V Rail | +5V Power Output |
+
+---
+
+### 4.5 Analog Inputs Quick Reference (`analogRead`)
+
+The N76E003 provides high-speed **12-bit SAR ADC** (`0` to `4095`, representing `0.000 V` to `5.000 V`):
+
+| Arduino Name | Board Silkscreen | Header Location | Hardware Channel | Best Use Cases |
+|:---:|:---|:---|:---:|:---|
+| **`A0`** | **`P0.5`** | Left Header, Pin 12 (Bottom Left) | `AIN4` | Primary analog input (Potentiometer, LM35, LDR) |
+| **`A1`** | **`P0.4`** | Right Header, Pin 12 (Bottom Right) | `AIN5` | Secondary analog input (1k Preset, Joysticks) |
+| **`A2`** | **`PWM5P0.3`** | Right Header, Pin 11 | `AIN6` | Analog input |
+| **`A3`** | **`PWM1P1.1`** | Right Header, Pin 6 | `AIN7` | Analog input |
+| **`A4`** | **`P1.7`** | Left Header, Pin 7 | `AIN0` | Analog input / Single-wire sensors (DHT11) |
+| **`A5`** | **`P3.0`** | Left Header, Pin 8 | `AIN1` | Analog input |
+| **`A6`** | **`P0.7RX`** | Left Header, Pin 10 | `AIN2` | *(Shared with USB RX — keep for Serial)* |
+| **`A7`** | **`P0.6TX`** | Left Header, Pin 11 | `AIN3` | *(Shared with USB TX — keep for Serial)* |
+
+---
+
+### 4.6 Communication Interfaces Quick Reference
+
+- **Hardware Serial (UART0 at 115200 baud)**:
+  - `Serial.begin(115200)` uses `P0.6TX` and `P0.7RX`, connected to the onboard CH340 USB chip.
+- **Hardware I2C (`Wire` / OLED displays)**:
+  - `SCL`: `P1.6` (Left Header Pin 6 or Bottom Header Pin 3)
+  - `SDA`: `P1.5` (Left Header Pin 5 or Bottom Header Pin 4)
+- **Hardware SPI (`SPI`)**:
+  - `SCK`: `P1.4` (Right Header Pin 3 / `D6`)
+  - `MOSI`: `SCLP1.3` (Right Header Pin 4 / `D7`)
+  - `MISO`: `PWM3P0.0` (Right Header Pin 8 / `D11`)
+  - `SS`: `PWM4P0.1` (Right Header Pin 9 / `D12`)
 
 ---
 
