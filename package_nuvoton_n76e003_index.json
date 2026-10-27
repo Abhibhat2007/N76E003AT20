@@ -1,0 +1,35 @@
+{
+  "packages": [
+    {
+      "name": "Nuvoton",
+      "maintainer": "Community",
+      "websiteURL": "https://github.com/Abhibhat2007/N76E003AT20",
+      "email": "support@example.com",
+      "help": {
+        "online": "https://github.com/Abhibhat2007/N76E003AT20/issues"
+      },
+      "platforms": [
+        {
+          "name": "Nuvoton N76E003 8051 Boards",
+          "architecture": "8051",
+          "version": "1.0.0",
+          "category": "Contributed",
+          "help": {
+            "online": "https://github.com/Abhibhat2007/N76E003AT20"
+          },
+          "url": "https://github.com/Abhibhat2007/N76E003AT20/releases/download/v1.0.0/n76e003-arduino-1.0.0.zip",
+          "archiveFileName": "n76e003-arduino-1.0.0.zip",
+          "checksum": "SHA-256:231ebf91d727b87331f8d99a94f6dcb7f1bd16908cde2612949648acf900abe2",
+          "size": "19516",
+          "boards": [
+            {
+              "name": "Nuvoton N76E003 (TSSOP20/QFN20)"
+            }
+          ],
+          "toolsDependencies": []
+        }
+      ],
+      "tools": []
+    }
+  ]
+}
